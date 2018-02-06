@@ -172,4 +172,4 @@ def assign_pieces(turno_player, player1_set, player2_set, player3_set, player4_s
     return set_player
 
 
-def find_all_legal_moves(board, turno_player, set_pieces):
+def find_all_legal_moves(board, player_turn, set_pieces):

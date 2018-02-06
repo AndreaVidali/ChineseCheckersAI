@@ -1,21 +1,68 @@
+# import random
+# import numpy as np
+#
+# ciao = [[0, 12], [1, 11], [1, 13]]
+#
+# print(ciao)
+#
+# i = 0
+#
+# for x, y in ciao:
+#
+#     x = x + 3
+#     ciao[i] = [x, y]
+#     i = i + 1
+#
+# print(ciao)
+#
+# random1 = random.randint(1, 6)
+# print(random1)
 
+import pygame
+import sys
+from pygame.locals import *
 
-import random
-import numpy as np
+pygame.init()
 
-ciao = [[0, 12], [1, 11], [1, 13]]
+FPS = 30
+fpsClock = pygame.time.Clock()
 
-print(ciao)
+# set up the window
+DISPLAYSURF = pygame.display.set_mode((400, 300), 0, 32)
+pygame.display.set_caption('Animation')
 
-i = 0
+WHITE = (255, 255, 255)
+catImg = pygame.image.load('cat.png')
+catx = 10
+caty = 10
+direction = 'right'
 
-for x, y in ciao:
+while True:  # the main game loop
+    DISPLAYSURF.fill(WHITE)
 
-    x = x + 3
-    ciao[i] = [x, y]
-    i = i + 1
+    if direction == 'right':
+        catx += 5
+        if catx == 280:
+            direction = 'down'
+    elif direction == 'down':
+        caty += 5
+        if caty == 220:
+            direction = 'left'
+    elif direction == 'left':
+        catx -= 5
+        if catx == 10:
+            direction = 'up'
+    elif direction == 'up':
+        caty -= 5
+        if caty == 10:
+            direction = 'right'
 
-print(ciao)
+    DISPLAYSURF.blit(catImg, (catx, caty))
 
-random1 = random.randint(1, 6)
-print(random1)
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+
+    pygame.display.update()
+    fpsClock.tick(FPS)

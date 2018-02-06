@@ -25,19 +25,19 @@ player4_set = [[13, 9], [13, 11], [13, 13], [13, 15], [14, 10], [14, 12], [14, 1
 player5_set = [[9, 3], [10, 2], [10, 4], [11, 1], [11, 3], [11, 5], [12, 0], [12, 2], [12, 4], [12, 6]]
 player6_set = [[4, 0], [4, 2], [4, 4], [4, 6], [5, 1], [5, 3], [5, 5], [6,2], [6, 4], [7, 3]]
 
-# decidi player
-turno_player = random.randint(1, 6)
+# player decision
+player_turn = random.randint(1, 6)
 
 while not match_end:
 
-    set_pieces = assign_pieces(turno_player, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set)
+    set_pieces = assign_pieces(player_turn, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set)
 
-    all_legal_moves[] = find_all_legal_moves(board, turno_player, set_pieces)
+    all_legal_moves[] = find_all_legal_moves(board, player_turn, set_pieces)
     # find_best_move(board, all_legal_moves[]) Returns: my_move
     # do_move(board, my_move) Throws: error ILLEGAL_MOVE Updates: board
 
-    turno_player = turno_player + 1
-    if turno_player == 7:
-        turno_player = 1
+    player_turn = player_turn + 1
+    if player_turn == 7:
+        player_turn = 1
 
 print(board)

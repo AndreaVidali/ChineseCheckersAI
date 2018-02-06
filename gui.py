@@ -15,25 +15,28 @@ PLAYER3_RED = (255, 0, 0)
 # 4 = PLAYER 4
 PLAYER4_BLUE = (0, 0, 255)
 # 5 = PLAYER 5
-PLAYER5_GREEN = (0, 255, 0)
+PLAYER5_GREEN = (0, 200, 0)
 # 6 = PLAYER 6
-PLAYER6_YELLOW = (255, 255, 0)
+PLAYER6_YELLOW = (243, 243, 14)
+# HIGHLIGHT
+HIGHLIGHT = (0, 255, 255)
 
 # costants of the board
 H_MARGIN_DISTANCE = 20
 V_MARGIN_DISTANCE = 20
 CIRCLE_RADIUS = 20
+CIRCLE_DIAMETER = 2 * CIRCLE_RADIUS
 H_SPACING = 8
 V_SPACING = 1
-WINDOW_WIDTH = (H_MARGIN_DISTANCE * 2) + (CIRCLE_RADIUS * 13 * 2) + (H_SPACING * 12)
-WINDOW_HEIGHT = (V_MARGIN_DISTANCE * 2) + (CIRCLE_RADIUS * 17 * 2) + (V_SPACING * 16)
+WINDOW_WIDTH = (H_MARGIN_DISTANCE * 2) + (CIRCLE_DIAMETER * 13) + (H_SPACING * 12)
+WINDOW_HEIGHT = (V_MARGIN_DISTANCE * 2) + (CIRCLE_DIAMETER * 17) + (V_SPACING * 16)
 
 
-def init_board(board):
+def init_board():
     pg.init()
     display_surface = pg.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     pg.display.set_caption('Chinese Checkers AI')
-    draw_board(board, display_surface)
+    return display_surface
 
 
 def draw_board(board, display_surface):
@@ -45,7 +48,7 @@ def draw_board(board, display_surface):
     for row in range(0, 17):
 
         x_coord_long = H_MARGIN_DISTANCE + CIRCLE_RADIUS
-        x_coord_short = int(H_MARGIN_DISTANCE + CIRCLE_RADIUS * 2 + (H_SPACING / 2))
+        x_coord_short = int(H_MARGIN_DISTANCE + CIRCLE_DIAMETER + (H_SPACING / 2))
 
         for circle_in_a_row in range(0, 13):
             if row % 2 == 0:
@@ -53,16 +56,16 @@ def draw_board(board, display_surface):
                 board_value = board[row][circle_in_a_row * 2]
                 color_circle(board_value, display_surface, x_coord_long, y_coord)
 
-                x_coord_long = x_coord_long + CIRCLE_RADIUS * 2 + H_SPACING
+                x_coord_long = x_coord_long + CIRCLE_DIAMETER + H_SPACING
 
             elif row % 2 != 0 and circle_in_a_row != 12:
 
                 board_value = board[row][circle_in_a_row * 2 + 1]
                 color_circle(board_value, display_surface, x_coord_short, y_coord)
 
-                x_coord_short = x_coord_short + CIRCLE_RADIUS * 2 + H_SPACING
+                x_coord_short = x_coord_short + CIRCLE_DIAMETER + H_SPACING
 
-        y_coord = y_coord + CIRCLE_RADIUS * 2 + V_SPACING
+        y_coord = y_coord + CIRCLE_DIAMETER + V_SPACING
 
 
 def color_circle(board_value, display_surface, x_coord, y_coord):
@@ -83,3 +86,27 @@ def color_circle(board_value, display_surface, x_coord, y_coord):
         pg.draw.circle(display_surface, PLAYER5_GREEN, (x_coord, y_coord), CIRCLE_RADIUS, 0)
     if board_value == 6:
         pg.draw.circle(display_surface, PLAYER6_YELLOW, (x_coord, y_coord), CIRCLE_RADIUS, 0)
+
+
+def highlight_best_move(best_move, display_surface):
+
+    [start_x, start_y] = best_move[0]
+    [end_x, end_y] = best_move[1]
+
+    circle_start_x, circle_start_y = find_circle_from(start_x, start_y)
+    pg.draw.ellipse(display_surface, HIGHLIGHT, (circle_start_x - CIRCLE_RADIUS, circle_start_y - CIRCLE_RADIUS,
+                                                 CIRCLE_DIAMETER, CIRCLE_DIAMETER), 3)
+    print(start_x, start_y, 'pix', circle_start_x, circle_start_y)
+    circle_end_x, circle_end_y = find_circle_from(end_x, end_y)
+    pg.draw.ellipse(display_surface, HIGHLIGHT, (circle_end_x - CIRCLE_RADIUS, circle_end_y - CIRCLE_RADIUS,
+                                                 CIRCLE_DIAMETER, CIRCLE_DIAMETER), 3)
+
+    pg.display.update()
+
+
+def find_circle_from(x, y):
+
+    circle_x = V_MARGIN_DISTANCE + CIRCLE_DIAMETER * x + V_SPACING * x + CIRCLE_RADIUS
+    circle_y = H_MARGIN_DISTANCE + CIRCLE_DIAMETER * y + H_SPACING * y + CIRCLE_RADIUS
+
+    return circle_x, circle_y

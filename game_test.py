@@ -1,11 +1,6 @@
-import pygame as pg
-import sys
-from pygame.locals import *
-
 import random
 import numpy as np
-from engine import build_board, assign_pieces, find_all_legal_moves#, do_move
-from gui import init_board, draw_board, highlight_best_move
+from engine import build_board, assign_pieces, find_all_legal_moves
 
 board = np.zeros((17, 25))
 board = build_board(board)
@@ -17,48 +12,29 @@ player4_set = [[13, 9], [13, 11], [13, 13], [13, 15], [14, 10], [14, 12], [14, 1
 player5_set = [[9, 3], [10, 2], [10, 4], [11, 1], [11, 3], [11, 5], [12, 0], [12, 2], [12, 4], [12, 6]]
 player6_set = [[4, 0], [4, 2], [4, 4], [4, 6], [5, 1], [5, 3], [5, 5], [6, 2], [6, 4], [7, 3]]
 
-display_surface = init_board()
-
 
 def main():
 
     # player decision
     player_turn = random.randint(1, 6)
 
-    while True:
+    x = 0
 
-        draw_board(board, display_surface)
-
-        for event in pg.event.get():
-            if event.type == QUIT:
-                pg.quit()
-                sys.exit()
+    while x < 10:
 
         set_pieces = assign_pieces(player_turn, player1_set, player2_set, player3_set, player4_set, player5_set,
                                    player6_set)
 
         all_legal_moves = find_all_legal_moves(board, set_pieces)
-
-        best_move_n = random.randint(0, all_legal_moves.__len__() - 1)
-        best_move = all_legal_moves[best_move_n]
+        print(player_turn, set_pieces, "\n", all_legal_moves)
         # my_move = find_best_move(board, all_legal_moves)
+        # do_move(board, my_move) Throws: error ILLEGAL_MOVE Updates: board
 
-        print(player_turn, best_move)
-
-        highlight_best_move(best_move, display_surface)
-
-        pg.time.wait(60000)
-
-        # board = do_move(board, best_move)
-
-        # remove_highlight(board, best_move)
-
-        # change player turn
         player_turn = player_turn + 1
         if player_turn == 7:
             player_turn = 1
 
-        #pg.display.update()
+        x = x + 1
 
 
 if __name__ == '__main__':

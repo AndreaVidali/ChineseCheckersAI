@@ -1,5 +1,3 @@
-import numpy as np
-
 def build_board(board):
 
     board[:][:] = -1
@@ -173,3 +171,64 @@ def assign_pieces(turno_player, player1_set, player2_set, player3_set, player4_s
 
 
 def find_all_legal_moves(board, player_turn, set_pieces):
+
+    valid_moves = []
+    for x, y in set_pieces:
+        valid_moves = check_moves([x, y], 0, [x, y], None, valid_moves)
+
+
+def check_moves(board, start, depth, origin, previous, valid_moves):
+
+    [start_x, start_y] = start
+    neighbors_list = neighbors(start)
+
+    for x_v1, y_v1 in neighbors_list:
+        if board[x_v1][y_v1] == 0 and depth == 0:
+            valid_moves.append([start, [x_v1, y_v1]])
+        if board[x_v1][y_v1] > 0 and depth == 0:
+            x_v2 = x_v1 + (x_v1 - start_x)
+            y_v2 = y_v1 + (y_v1 - start_y)
+            if board[x_v2][y_v2] == 0:
+                valid_moves.append([start, [x_v2, y_v2]])
+                check_moves(board, [x_v2, y_v2], depth + 1, origin, [x_v1, y_v1], valid_moves)
+        if board[x_v1][y_v1] > 0 and depth > 0 and previous != [x_v1, y_v1]:
+            x_v2 = x_v1 + (x_v1 - start_x)
+            y_v2 = y_v1 + (y_v1 - start_y)
+            if board[x_v2][y_v2] == 0:
+                valid_moves.append([origin, [x_v2, y_v2]])
+                check_moves(board, [x_v2, y_v2], depth + 1, origin, [x_v1, y_v1], valid_moves)
+
+    return valid_moves
+
+
+def neighbors(node):
+
+    [x, y] = node
+
+    neighbors_list = []
+
+    nb = [x, y + 2]
+    if 0 <= nb[1] <= 24:
+        neighbors_list.append([x, y + 2])
+
+    nb = [x, y - 2]
+    if 0 <= nb[1] <= 24:
+        neighbors_list.append([x, y - 2])
+
+    nb = [x + 1, y + 1]
+    if 0 <= nb[0] <= 16 and 0 <= nb[1] <= 24 :
+        neighbors_list.append([x + 1, y + 1])
+
+    nb = [x + 1, y - 1]
+    if 0 <= nb[0] <= 16 and 0 <= nb[1] <= 24:
+        neighbors_list.append([x + 1, y - 1])
+
+    nb = [x - 1, y + 1]
+    if 0 <= nb[0] <= 16 and 0 <= nb[1] <= 24:
+        neighbors_list.append([x - 1, y + 1])
+
+    nb = [x - 1, y - 1]
+    if 0 <= nb[0] <= 16 and 0 <= nb[1] <= 24:
+        neighbors_list.append([x - 1, y - 1])
+
+    return neighbors_list

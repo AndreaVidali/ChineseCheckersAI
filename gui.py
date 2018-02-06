@@ -95,18 +95,26 @@ def highlight_best_move(best_move, display_surface):
 
     circle_start_x, circle_start_y = find_circle_from(start_x, start_y)
     pg.draw.ellipse(display_surface, HIGHLIGHT, (circle_start_x - CIRCLE_RADIUS, circle_start_y - CIRCLE_RADIUS,
-                                                 CIRCLE_DIAMETER, CIRCLE_DIAMETER), 3)
-    print(start_x, start_y, 'pix', circle_start_x, circle_start_y)
+                                                 CIRCLE_DIAMETER, CIRCLE_DIAMETER), 5)
+
     circle_end_x, circle_end_y = find_circle_from(end_x, end_y)
     pg.draw.ellipse(display_surface, HIGHLIGHT, (circle_end_x - CIRCLE_RADIUS, circle_end_y - CIRCLE_RADIUS,
-                                                 CIRCLE_DIAMETER, CIRCLE_DIAMETER), 3)
-
-    pg.display.update()
+                                                 CIRCLE_DIAMETER, CIRCLE_DIAMETER), 5)
 
 
 def find_circle_from(x, y):
 
-    circle_x = V_MARGIN_DISTANCE + CIRCLE_DIAMETER * x + V_SPACING * x + CIRCLE_RADIUS
-    circle_y = H_MARGIN_DISTANCE + CIRCLE_DIAMETER * y + H_SPACING * y + CIRCLE_RADIUS
+    if x % 2 == 0:
+        circle_x = int(H_MARGIN_DISTANCE + CIRCLE_RADIUS + (CIRCLE_DIAMETER + H_SPACING) * (y / 2))
+    else:
+        circle_x = int(H_MARGIN_DISTANCE + CIRCLE_DIAMETER + (H_SPACING / 2) + (CIRCLE_DIAMETER + H_SPACING) * ((y - 1)
+                                                                                                                / 2))
+    circle_y = V_MARGIN_DISTANCE + CIRCLE_RADIUS + (CIRCLE_DIAMETER + V_SPACING) * x
 
     return circle_x, circle_y
+
+
+
+
+
+

@@ -246,9 +246,18 @@ def find_jump_between(start, x_v1, y_v1):
         return 0, 0
 
 
-#def do_move(board, best_move):
+def do_move(board, best_move):
 
+    [start_x, start_y] = best_move[0]
+    [end_x, end_y] = best_move[1]
 
+    piece = board[start_x][start_y]
+
+    board[start_x][start_y] = 0
+
+    board[end_x][end_y] = piece
+
+    return board
 
 
 

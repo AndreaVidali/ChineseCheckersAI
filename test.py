@@ -2,7 +2,7 @@ import random
 import numpy as np
 
 ciao = [0, 12]
-
+while()
 [x, y] = ciao
 
 print(ciao)

@@ -1,6 +1,4 @@
 import pygame as pg
-# import sys
-# from pygame.locals import *
 
 # -1 = NOT_VALID_SPACE
 BACKGROUND = (242, 213, 171)

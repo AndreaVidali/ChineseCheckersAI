@@ -1,10 +1,15 @@
 import numpy as np
+from strategies import *
 
 VISITED = 20
 NOT_VISITED = 15
 
+OBJ_POSITION = 22
 
-def build_board(board):
+
+def build_board():
+
+    board = np.zeros((17, 25))
 
     board[:][:] = -1
 
@@ -156,34 +161,177 @@ def build_board(board):
     return board
 
 
-def assign_set(turno_player, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set):
+def build_sets():
+
+    player1_set = [[0, 12], [1, 11], [1, 13], [2, 10], [2, 12], [2, 14], [3, 9], [3, 11], [3, 13], [3, 15]]
+    player2_set = [[4, 18], [4, 20], [4, 22], [4, 24], [5, 19], [5, 21], [5, 23], [6, 20], [6, 22], [7, 21]]
+    player3_set = [[9, 21], [10, 20], [10, 22], [11, 19], [11, 21], [11, 23], [12, 18], [12, 20], [12, 22], [12, 24]]
+    player4_set = [[13, 9], [13, 11], [13, 13], [13, 15], [14, 10], [14, 12], [14, 14], [15, 11], [15, 13], [16, 12]]
+    player5_set = [[9, 3], [10, 2], [10, 4], [11, 1], [11, 3], [11, 5], [12, 0], [12, 2], [12, 4], [12, 6]]
+    player6_set = [[4, 0], [4, 2], [4, 4], [4, 6], [5, 1], [5, 3], [5, 5], [6, 2], [6, 4], [7, 3]]
+
+    return player1_set, player2_set, player3_set, player4_set, player5_set, player6_set
+
+
+def build_obj_boards(board):
+
+    player1_obj = np.zeros(board.shape)
+    player2_obj = np.zeros(board.shape)
+    player3_obj = np.zeros(board.shape)
+    player4_obj = np.zeros(board.shape)
+    player5_obj = np.zeros(board.shape)
+    player6_obj = np.zeros(board.shape)
+
+    player4_obj[0][12] = OBJ_POSITION
+    player4_obj[1][11] = OBJ_POSITION
+    player4_obj[1][13] = OBJ_POSITION
+    player4_obj[2][10] = OBJ_POSITION
+    player4_obj[2][12] = OBJ_POSITION
+    player4_obj[2][14] = OBJ_POSITION
+    player4_obj[3][9] = OBJ_POSITION
+    player4_obj[3][11] = OBJ_POSITION
+    player4_obj[3][13] = OBJ_POSITION
+    player4_obj[3][15] = OBJ_POSITION
+
+    player5_obj[4][18] = OBJ_POSITION
+    player5_obj[4][20] = OBJ_POSITION
+    player5_obj[4][22] = OBJ_POSITION
+    player5_obj[4][24] = OBJ_POSITION
+    player5_obj[5][19] = OBJ_POSITION
+    player5_obj[5][21] = OBJ_POSITION
+    player5_obj[5][23] = OBJ_POSITION
+    player5_obj[6][20] = OBJ_POSITION
+    player5_obj[6][22] = OBJ_POSITION
+    player5_obj[7][21] = OBJ_POSITION
+
+    player6_obj[9][21] = OBJ_POSITION
+    player6_obj[10][20] = OBJ_POSITION
+    player6_obj[10][22] = OBJ_POSITION
+    player6_obj[11][19] = OBJ_POSITION
+    player6_obj[11][21] = OBJ_POSITION
+    player6_obj[11][23] = OBJ_POSITION
+    player6_obj[12][18] = OBJ_POSITION
+    player6_obj[12][20] = OBJ_POSITION
+    player6_obj[12][22] = OBJ_POSITION
+    player6_obj[12][24] = OBJ_POSITION
+
+    player1_obj[13][9] = OBJ_POSITION
+    player1_obj[13][11] = OBJ_POSITION
+    player1_obj[13][13] = OBJ_POSITION
+    player1_obj[13][15] = OBJ_POSITION
+    player1_obj[14][10] = OBJ_POSITION
+    player1_obj[14][12] = OBJ_POSITION
+    player1_obj[14][14] = OBJ_POSITION
+    player1_obj[15][11] = OBJ_POSITION
+    player1_obj[15][13] = OBJ_POSITION
+    player1_obj[16][12] = OBJ_POSITION
+
+    player2_obj[9][21 - 18] = OBJ_POSITION
+    player2_obj[10][20 - 18] = OBJ_POSITION
+    player2_obj[10][22 - 18] = OBJ_POSITION
+    player2_obj[11][19 - 18] = OBJ_POSITION
+    player2_obj[11][21 - 18] = OBJ_POSITION
+    player2_obj[11][23 - 18] = OBJ_POSITION
+    player2_obj[12][18 - 18] = OBJ_POSITION
+    player2_obj[12][20 - 18] = OBJ_POSITION
+    player2_obj[12][22 - 18] = OBJ_POSITION
+    player2_obj[12][24 - 18] = OBJ_POSITION
+
+    player3_obj[4][18 - 18] = OBJ_POSITION
+    player3_obj[4][20 - 18] = OBJ_POSITION
+    player3_obj[4][22 - 18] = OBJ_POSITION
+    player3_obj[4][24 - 18] = OBJ_POSITION
+    player3_obj[5][19 - 18] = OBJ_POSITION
+    player3_obj[5][21 - 18] = OBJ_POSITION
+    player3_obj[5][23 - 18] = OBJ_POSITION
+    player3_obj[6][20 - 18] = OBJ_POSITION
+    player3_obj[6][22 - 18] = OBJ_POSITION
+    player3_obj[7][21 - 18] = OBJ_POSITION
+
+    return player1_obj, player2_obj, player3_obj, player4_obj, player5_obj, player6_obj
+
+
+def build_obj_sets():
+
+    player4_obj = [[0, 12], [1, 11], [1, 13], [2, 10], [2, 12], [2, 14], [3, 9], [3, 11], [3, 13], [3, 15]]
+    player5_obj = [[4, 18], [4, 20], [4, 22], [4, 24], [5, 19], [5, 21], [5, 23], [6, 20], [6, 22], [7, 21]]
+    player6_obj = [[9, 21], [10, 20], [10, 22], [11, 19], [11, 21], [11, 23], [12, 18], [12, 20], [12, 22], [12, 24]]
+    player1_obj = [[13, 9], [13, 11], [13, 13], [13, 15], [14, 10], [14, 12], [14, 14], [15, 11], [15, 13], [16, 12]]
+    player2_obj = [[9, 3], [10, 2], [10, 4], [11, 1], [11, 3], [11, 5], [12, 0], [12, 2], [12, 4], [12, 6]]
+    player3_obj = [[4, 0], [4, 2], [4, 4], [4, 6], [5, 1], [5, 3], [5, 5], [6, 2], [6, 4], [7, 3]]
+
+    return player1_obj, player2_obj, player3_obj, player4_obj, player5_obj, player6_obj
+
+
+def assign_set(player_turn, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set):
 
     set_player = player1_set
 
-    if turno_player == 1:
+    if player_turn == 1:
         set_player = player1_set
-    if turno_player == 2:
+    if player_turn == 2:
         set_player = player2_set
-    if turno_player == 3:
+    if player_turn == 3:
         set_player = player3_set
-    if turno_player == 4:
+    if player_turn == 4:
         set_player = player4_set
-    if turno_player == 5:
+    if player_turn == 5:
         set_player = player5_set
-    if turno_player == 6:
+    if player_turn == 6:
         set_player = player6_set
 
     return set_player
 
 
-def find_all_legal_moves(board, set_pieces):
+def assign_obj_board(player_turn, player1_obj, player2_obj, player3_obj, player4_obj, player5_obj, player6_obj):
+
+    obj_board = player1_obj
+
+    if player_turn == 1:
+        obj_board = player1_obj
+    if player_turn == 2:
+        obj_board = player2_obj
+    if player_turn == 3:
+        obj_board = player3_obj
+    if player_turn == 4:
+        obj_board = player4_obj
+    if player_turn == 5:
+        obj_board = player5_obj
+    if player_turn == 6:
+        obj_board = player6_obj
+
+    return obj_board
+
+
+def assign_obj_set(player_turn, player1_obj, player2_obj, player3_obj, player4_obj, player5_obj, player6_obj):
+
+    obj_set = player1_obj
+
+    if player_turn == 1:
+        obj_set = player1_obj
+    if player_turn == 2:
+        obj_set = player2_obj
+    if player_turn == 3:
+        obj_set = player3_obj
+    if player_turn == 4:
+        obj_set = player4_obj
+    if player_turn == 5:
+        obj_set = player5_obj
+    if player_turn == 6:
+        obj_set = player6_obj
+
+    return obj_set
+
+
+def find_all_legal_moves(board, set_pieces, obj_set):
 
     valid_moves = []
 
     for x, y in set_pieces:
 
-        color_board = np.full(board.shape, NOT_VISITED)
-        valid_moves = check_moves(board, color_board, [x, y], 0, [x, y], valid_moves)
+        if [x, y] not in obj_set:
+            color_board = np.full(board.shape, NOT_VISITED)
+            valid_moves = check_moves(board, color_board, [x, y], 0, [x, y], valid_moves)
 
     return valid_moves
 
@@ -199,21 +347,21 @@ def check_moves(board, color_board, start, depth, origin, v_moves):
 
         if depth == 0 and board[x_v1][y_v1] == 0:
             v_moves.append([start, [x_v1, y_v1]])
-            print("nodo origine:", origin, "- profondita:", depth, "- end:", x_v1, y_v1)
+            # print("nodo origine:", origin, "- profondita:", depth, "- end:", x_v1, y_v1)
 
         if depth == 0 and board[x_v1][y_v1] > 0:
             x_v2, y_v2 = find_jump_between(start, x_v1, y_v1)
             if board[x_v2][y_v2] == 0:
                 v_moves.append([start, [x_v2, y_v2]])
-                print("nodo origine:", origin, "- profondita:", depth, "- start:", start, "- destinazione:", x_v2, y_v2)
+                # print("nodo origine:", origin, "- profondita:", depth, "- start:", start, "- destinazione:", x_v2, y_v2)
                 v_moves = check_moves(board, color_board, [x_v2, y_v2], depth + 1, origin, v_moves)
 
         if depth > 0 and board[x_v1][y_v1] > 0:
             x_v2, y_v2 = find_jump_between(start, x_v1, y_v1)
             if board[x_v2][y_v2] == 0 and color_board[x_v2][y_v2] == NOT_VISITED:
                 v_moves.append([origin, [x_v2, y_v2]])
-                print("nodo origine:", origin, "- profondita:", depth, "- start:", start, "- destinazione:", x_v2,
-                      y_v2)
+                # print("nodo origine:", origin, "- profondita:", depth, "- start:", start, "- destinazione:", x_v2,
+                #       y_v2)
                 v_moves = check_moves(board, color_board, [x_v2, y_v2], depth + 1, origin, v_moves)
 
     return v_moves
@@ -280,7 +428,7 @@ def do_move(board, best_move, set_pieces):
     return board, set_pieces
 
 
-def update_set(set_pieces, player_turn, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set):
+def update_player_set(set_pieces, player_turn, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set):
 
     if player_turn == 1:
         player1_set = set_pieces
@@ -297,3 +445,9 @@ def update_set(set_pieces, player_turn, player1_set, player2_set, player3_set, p
 
     return player1_set, player2_set, player3_set, player4_set, player5_set, player6_set
 
+
+def find_best_move(all_legal_moves, obj_set):
+
+    best_move = greedy(all_legal_moves, obj_set)
+
+    return best_move

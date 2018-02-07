@@ -1,3 +1,9 @@
+import numpy as np
+
+VISITED = 20
+NOT_VISITED = 15
+
+
 def build_board(board):
 
     board[:][:] = -1
@@ -150,7 +156,7 @@ def build_board(board):
     return board
 
 
-def assign_pieces(turno_player, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set):
+def assign_set(turno_player, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set):
 
     set_player = player1_set
 
@@ -173,29 +179,42 @@ def assign_pieces(turno_player, player1_set, player2_set, player3_set, player4_s
 def find_all_legal_moves(board, set_pieces):
 
     valid_moves = []
+
     for x, y in set_pieces:
-        valid_moves = check_moves(board, [x, y], 0, [x, y], [0, 0], valid_moves)
+
+        color_board = np.full(board.shape, NOT_VISITED)
+        valid_moves = check_moves(board, color_board, [x, y], 0, [x, y], valid_moves)
 
     return valid_moves
 
 
-def check_moves(board, start, depth, origin, previous, v_moves):
+def check_moves(board, color_board, start, depth, origin, v_moves):
+
+    [x_v0, y_v0] = start
+    color_board[x_v0][y_v0] = VISITED
 
     neighbors_list = find_neighbors_from(start)
 
     for x_v1, y_v1 in neighbors_list:
-        if board[x_v1][y_v1] == 0 and depth == 0:
+
+        if depth == 0 and board[x_v1][y_v1] == 0:
             v_moves.append([start, [x_v1, y_v1]])
-        if board[x_v1][y_v1] > 0 and depth == 0:
+            print("nodo origine:", origin, "- profondita:", depth, "- end:", x_v1, y_v1)
+
+        if depth == 0 and board[x_v1][y_v1] > 0:
             x_v2, y_v2 = find_jump_between(start, x_v1, y_v1)
             if board[x_v2][y_v2] == 0:
                 v_moves.append([start, [x_v2, y_v2]])
-                v_moves = check_moves(board, [x_v2, y_v2], depth + 1, origin, [x_v1, y_v1], v_moves)
-        if board[x_v1][y_v1] > 0 and depth > 0 and previous != [x_v1, y_v1]:
+                print("nodo origine:", origin, "- profondita:", depth, "- start:", start, "- destinazione:", x_v2, y_v2)
+                v_moves = check_moves(board, color_board, [x_v2, y_v2], depth + 1, origin, v_moves)
+
+        if depth > 0 and board[x_v1][y_v1] > 0:
             x_v2, y_v2 = find_jump_between(start, x_v1, y_v1)
-            if board[x_v2][y_v2] == 0:
+            if board[x_v2][y_v2] == 0 and color_board[x_v2][y_v2] == NOT_VISITED:
                 v_moves.append([origin, [x_v2, y_v2]])
-                v_moves = check_moves(board, [x_v2, y_v2], depth + 1, origin, [x_v1, y_v1], v_moves)
+                print("nodo origine:", origin, "- profondita:", depth, "- start:", start, "- destinazione:", x_v2,
+                      y_v2)
+                v_moves = check_moves(board, color_board, [x_v2, y_v2], depth + 1, origin, v_moves)
 
     return v_moves
 
@@ -246,18 +265,35 @@ def find_jump_between(start, x_v1, y_v1):
         return 0, 0
 
 
-def do_move(board, best_move):
+def do_move(board, best_move, set_pieces):
 
     [start_x, start_y] = best_move[0]
     [end_x, end_y] = best_move[1]
 
     piece = board[start_x][start_y]
-
     board[start_x][start_y] = 0
-
     board[end_x][end_y] = piece
 
-    return board
+    set_pieces.remove([start_x, start_y])
+    set_pieces.append([end_x, end_y])
+
+    return board, set_pieces
 
 
+def update_set(set_pieces, player_turn, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set):
+
+    if player_turn == 1:
+        player1_set = set_pieces
+    if player_turn == 2:
+        player2_set = set_pieces
+    if player_turn == 3:
+        player3_set = set_pieces
+    if player_turn == 4:
+        player4_set = set_pieces
+    if player_turn == 5:
+        player5_set = set_pieces
+    if player_turn == 6:
+        player6_set = set_pieces
+
+    return player1_set, player2_set, player3_set, player4_set, player5_set, player6_set
 

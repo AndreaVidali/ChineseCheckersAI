@@ -1,20 +1,37 @@
 import random
 import numpy as np
 
-ciao = [[[0, 12], [1, 11]], [[1, 13], [1, 13]]]
+ciao = [0, 12]
+
+[x, y] = ciao
 
 print(ciao)
-print(ciao[0])
-print(ciao[0][0])
-print(ciao[0][0][0])
-
-miao = [[[4, 18], [4, 16]], [[4, 18], [5, 17]], [[4, 20], [4, 16]], [[4, 20], [6, 18]], [[5, 19], [5, 17]], [[5, 19], [6, 18]], [[5, 21], [5, 17]], [[5, 21], [7, 19]], [[6, 20], [6, 18]], [[6, 20], [7, 19]], [[6, 22], [6, 18]], [[6, 22], [8, 20]], [[7, 21], [7, 19]], [[7, 21], [8, 20]]]
-
-num = 5
-
-print(miao.__len__())
-print(miao[13])
-
+#
+# player5_set = [[9, 3], [10, 2], [10, 4], [11, 1], [11, 3], [11, 5], [12, 0], [12, 2], [12, 4], [12, 6]]
+#
+# x = 99
+# y = 48
+# xx = 10
+# xy = 4
+#
+# print(player5_set)
+# player5_set.remove([xx, xy])
+# print(player5_set)
+# player5_set.append([x, y])
+# print(player5_set)
+#
+# set_pieces = [[0, 12], [1, 11], [1, 13], [2, 10], [2, 12], [2, 14], [3, 9], [3, 11], [3, 13], [3, 15]]
+#
+# start_x = 2
+# start_y = 14
+# end_x = 4
+# end_y = 16
+#
+# print("originale:", set_pieces, "toRemove:", [start_x, start_y])
+# set_pieces.remove([start_x, start_y])
+# print("remove:", set_pieces, "toAppend:", [end_x, end_y])
+# set_pieces.append([end_x, end_y])
+# print("append:", set_pieces)
 
 
 
@@ -79,3 +96,13 @@ print(miao[13])
 #
 #     pygame.display.update()
 #     fpsClock.tick(FPS)
+
+# import numpy as np
+# board = np.zeros((5, 7))
+#
+# print(board)
+#
+# new_board = np.full(board.shape, 15)
+
+print(new_board)
+print(board.shape)

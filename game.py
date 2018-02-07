@@ -4,7 +4,7 @@ from pygame.locals import *
 
 import random
 import numpy as np
-from engine import build_board, assign_pieces, find_all_legal_moves, do_move
+from engine import build_board, assign_set, find_all_legal_moves, do_move, update_set
 from gui import init_board, draw_board, highlight_best_move#, remove_highlight
 
 
@@ -36,13 +36,15 @@ def main():
             elif event.type == pg.KEYDOWN:
                 if event.key == ord("a"):
 
-                    set_pieces = assign_pieces(player_turn, player1_set, player2_set, player3_set, player4_set, player5_set,
-                                               player6_set)
+                    set_pieces = assign_set(player_turn, player1_set, player2_set, player3_set, player4_set,
+                                            player5_set, player6_set)
 
                     all_legal_moves = find_all_legal_moves(board, set_pieces)
 
                     best_move_n = random.randint(0, all_legal_moves.__len__() - 1)
                     best_move = all_legal_moves[best_move_n]
+                    print("player:", player_turn, "best move:", best_move)
+
                     # my_move = find_best_move(board, all_legal_moves)
 
                     # highlight the move chosen
@@ -50,10 +52,15 @@ def main():
                     pg.display.update()
 
                     # do the best move
-                    board = do_move(board, best_move)
+                    board, set_pieces = do_move(board, best_move, set_pieces)
+
+                    # update set
+                    player1_set, player2_set, player3_set, player4_set, player5_set, player6_set = \
+                        update_set(set_pieces, player_turn, player1_set, player2_set, player3_set, player4_set,
+                                   player5_set, player6_set)
 
                     # remove highlighted move
-                    #remove_highlight(best_move, display_surface)
+                    # remove_highlight(best_move, display_surface)
 
                     # update the board
 

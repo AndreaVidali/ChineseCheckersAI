@@ -1,6 +1,7 @@
 import numpy as np
 from strategies import *
 
+
 VISITED = 20
 NOT_VISITED = 15
 
@@ -263,6 +264,18 @@ def build_obj_sets():
     return player1_obj, player2_obj, player3_obj, player4_obj, player5_obj, player6_obj
 
 
+def build_invalid_set():
+
+    player1_i_set = [[13, 9], [13, 11], [13, 13], [13, 15], [14, 10], [14, 12], [14, 14]]
+    player2_i_set = [[9, 3], [10, 2], [10, 4], [11, 3], [11, 5], [12, 4], [12, 6]]
+    player3_i_set = [[4, 4], [4, 6], [5, 3], [5, 5], [6, 2], [6, 4], [7, 3]]
+    player4_i_set = [[2, 10], [2, 12], [2, 14], [3, 9], [3, 11], [3, 13], [3, 15]]
+    player5_i_set = [[4, 18], [4, 20], [5, 19], [5, 21], [6, 20], [6, 22], [7, 21]]
+    player6_i_set = [[9, 21], [10, 20], [10, 22], [11, 19], [11, 21], [12, 18], [12, 20]]
+
+    return player1_i_set, player2_i_set, player3_i_set, player4_i_set, player5_i_set, player6_i_set
+
+
 def assign_set(player_turn, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set):
 
     set_player = player1_set
@@ -323,15 +336,52 @@ def assign_obj_set(player_turn, player1_obj, player2_obj, player3_obj, player4_o
     return obj_set
 
 
-def find_all_legal_moves(board, set_pieces, obj_set):
+def assign_invalid_set(player_turn, player1_i_set, player2_i_set, player3_i_set, player4_i_set, player5_i_set,
+                       player6_i_set):
+
+    invalid_set = player1_i_set
+
+    if player_turn == 1:
+        invalid_set = player1_i_set
+    if player_turn == 2:
+        invalid_set = player2_i_set
+    if player_turn == 3:
+        invalid_set = player3_i_set
+    if player_turn == 4:
+        invalid_set = player4_i_set
+    if player_turn == 5:
+        invalid_set = player5_i_set
+    if player_turn == 6:
+        invalid_set = player6_i_set
+
+    return invalid_set
+
+
+def find_all_legal_moves(board, set_pieces, obj_set, invalid_set):
 
     valid_moves = []
 
-    for x, y in set_pieces:
+    for piece in set_pieces:
 
-        if [x, y] not in obj_set:
-            color_board = np.full(board.shape, NOT_VISITED)
-            valid_moves = check_moves(board, color_board, [x, y], 0, [x, y], valid_moves)
+        #if piece not in obj_set:
+        color_board = np.full(board.shape, NOT_VISITED)
+        valid_moves = check_moves(board, color_board, piece, 0, piece, valid_moves)
+        #else:
+            #print("- GOAL: piece", piece, "in obj position")
+
+    valid_moves = valid_move_in_house(valid_moves, invalid_set)
+
+    return valid_moves
+
+
+def valid_move_in_house(valid_moves, invalid_set):
+
+    for valid_move in valid_moves:
+
+        end_move = valid_move[1]
+
+        if end_move in invalid_set:
+            valid_moves.remove(valid_move)
 
     return valid_moves
 
@@ -446,8 +496,19 @@ def update_player_set(set_pieces, player_turn, player1_set, player2_set, player3
     return player1_set, player2_set, player3_set, player4_set, player5_set, player6_set
 
 
-def find_best_move(all_legal_moves, obj_set):
+def find_best_move(board, all_legal_moves, obj_set, player_turn):
 
-    best_move = greedy(all_legal_moves, obj_set)
+    best_move = greedy(board, all_legal_moves, obj_set, player_turn)
 
     return best_move
+
+
+def check_win(set_pieces, obj_set):
+
+    game_end = True
+
+    for piece in set_pieces:
+        if piece not in obj_set:
+            game_end = False
+
+    return game_end

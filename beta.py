@@ -1,3 +1,4 @@
+
 # import pygame as pg
 # import numpy as np
 import sys
@@ -6,8 +7,12 @@ import random
 from engine import *
 from gui import *
 
+FPS = 30
+
 
 def main():
+
+    fps_lock = pg.time.Clock()
 
     board = build_board()
     # player1_obj, player2_obj, player3_obj, player4_obj, player5_obj, player6_obj = build_obj_boards(board)
@@ -19,7 +24,10 @@ def main():
     # player decision
     player_turn = random.randint(1, 6)
 
-    while True:
+    # game start
+    game_over = False
+
+    while True and not game_over:
 
         draw_board(board, display_surface)
 
@@ -28,7 +36,11 @@ def main():
                 pg.quit()
                 sys.exit()
 
-            pg.time.wait(60)
+
+            # change player turn
+            player_turn = player_turn + 1
+            if player_turn == 7:
+                player_turn = 1
 
             # consider the pieces of the player of this turn
             set_pieces = assign_set(player_turn, player1_set, player2_set, player3_set, player4_set,
@@ -40,12 +52,10 @@ def main():
             obj_set = assign_obj_set(player_turn, player1_obj, player2_obj, player3_obj, player4_obj,
                                      player5_obj, player6_obj)
 
-            print('player:', player_turn, "// calculating all legal moves")
-
             # find all legal moves given a piece set of a player
             all_legal_moves = find_all_legal_moves(board, set_pieces, obj_set)
 
-            # check if a player has won
+            # check if a player has won ------------------------------------------WRONG!
             if not all_legal_moves:
                 print('Player', player_turn, 'won')
                 pg.time.wait(60000)
@@ -53,8 +63,7 @@ def main():
             # choose the best move
             # best_move_n = random.randint(0, all_legal_moves.__len__() - 1)
             # best_move = all_legal_moves[best_move_n]
-            print('player:', player_turn, "// calculating best move")
-            best_move = find_best_move(all_legal_moves, obj_set)
+            best_move = find_best_move(board, all_legal_moves, obj_set, set_pieces, player_turn)
             print("player:", player_turn, "best move:", best_move)
 
             # highlight the move chosen
@@ -74,14 +83,13 @@ def main():
 
             # update the board
 
-            print('player:', player_turn, "// end turn ")
-
-            # change player turn
-            player_turn = player_turn + 1
-            if player_turn == 7:
-                player_turn = 1
+            # check if the player has won
+            game_over = check_win(set_pieces, obj_set)
 
             # pg.display.update()
+
+            #pg.time.wait(600)
+            fps_lock.tick(FPS)
 
 
 if __name__ == '__main__':

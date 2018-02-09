@@ -2,11 +2,9 @@
 # TODO fix rebuild of interface every damn turn
 # TODO strategies
 # TODO won screen + stats
-# TODO fix greedy -> cant go in win pos even it is close -> coordinate distance is bad
 # TODO interface not responding if i dont move cursor on it -> maybe insert FPS?
 # TODO random first move?
-# TODO detect stuck
-# TODO function that move
+# TODO detect stuck -> add rule that is not allowed to rest in an opponent triangle
 
 import pygame as pg
 # import numpy as np

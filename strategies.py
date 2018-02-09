@@ -40,7 +40,6 @@ from decimal import Decimal
 
 def greedy(board, all_legal_moves, obj_set, player_turn):
 
-    print("--- Legal moves:          ", all_legal_moves)
     print("--- Obj positions:        ", obj_set)
 
     obj_available = []
@@ -77,47 +76,37 @@ def greedy(board, all_legal_moves, obj_set, player_turn):
             obj_x = 12
             obj_y = 24
 
-        print("----- Eval move:", move)
+        #print("----- Eval move:", move)
 
         [start_x, start_y] = move[0]
         [end_x, end_y] = move[1]
 
-        if board[obj_x, obj_y] != player_turn:
+        for obj in obj_available:
 
-            start_diag = math.sqrt(((obj_x - start_x) ** 2) + ((obj_y - start_y) ** 2))
-            end_diag = math.sqrt(((obj_x - end_x) ** 2) + ((obj_y - end_y) ** 2))
+            #print("------- Obj pos:", obj)
+
+            [obj_x, obj_y] = obj
+
+            # trasform y coord imaging the board as a square, which it should be
+            square_start_y = (start_y * 17) / 25
+            square_end_y = (end_y * 17) / 25
+            square_obj_y = (obj_y * 17) / 25
+
+            start_diag = math.sqrt(((obj_x - start_x) ** 2) + ((square_obj_y - square_start_y) ** 2))
+            end_diag = math.sqrt(((obj_x - end_x) ** 2) + ((square_obj_y - square_end_y) ** 2))
 
             distance_travel = start_diag - end_diag
-
-            print("---------- distance:", round(distance_travel, 2), "- start_diag", round(start_diag, 2), ". end diag",
-                  round(end_diag, 2))
 
             if distance_travel > max_distance_travel:
                 best_move = move_index
                 max_distance_travel = distance_travel
-                print("---------- distance UPDATE: best move", all_legal_moves[best_move])
-
-        else:
-
-            for obj in obj_available:
-
-                print("------- Obj pos:", obj)
-
-                [obj_x, obj_y] = obj
-
-                start_diag = math.sqrt(((obj_x - start_x) ** 2) + ((obj_y - start_y) ** 2))
-                end_diag = math.sqrt(((obj_x - end_x) ** 2) + ((obj_y - end_y) ** 2))
-
-                distance_travel = start_diag - end_diag
-
-                print("---------- distance:", round(distance_travel, 2), "- start_diag", round(start_diag, 2), ". end diag", round(end_diag, 2))
-
-                if distance_travel > max_distance_travel:
-                    best_move = move_index
-                    max_distance_travel = distance_travel
-                    print("---------- distance UPDATE: best move", all_legal_moves[best_move])
+                #print("---------- distance:", round(distance_travel, 2), "- start_diag", round(start_diag, 2),
+                #      ". end diag", round(end_diag, 2))
+                #print("---------- distance UPDATE: best move", all_legal_moves[best_move])
 
         move_index = move_index + 1
+
+    #print("---------- best move", all_legal_moves[best_move], "distance:", max_distance_travel)
 
     return all_legal_moves[best_move]
 

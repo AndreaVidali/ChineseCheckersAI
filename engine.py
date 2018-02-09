@@ -369,21 +369,42 @@ def find_all_legal_moves(board, set_pieces, obj_set, invalid_set):
         #else:
             #print("- GOAL: piece", piece, "in obj position")
 
-    valid_moves = valid_move_in_house(valid_moves, invalid_set)
+    print("--- Legal moves:          ", valid_moves)
+    print("----- len", len(valid_moves))
+    print("--- Invalid set:          ", invalid_set)
+
+    valid_moves = valid_move_in_house(valid_moves, invalid_set, obj_set)
+
+    print("--- Legal moves after IS: ", valid_moves)
+    print("----- len", len(valid_moves))
 
     return valid_moves
 
 
-def valid_move_in_house(valid_moves, invalid_set):
+def valid_move_in_house(valid_moves, invalid_set, obj_set):
+
+    valid_set = [i for i in obj_set + invalid_set if i not in obj_set or i not in invalid_set]
+
+    moves_to_remove = []
 
     for valid_move in valid_moves:
 
+        start_move = valid_move[0]
         end_move = valid_move[1]
 
-        if end_move in invalid_set:
-            valid_moves.remove(valid_move)
+        # if start from invalid set must end in valid set
+        if start_move in invalid_set and end_move not in valid_set:
+            moves_to_remove.append(valid_move)
+            print("--- Removed move(1):", valid_move)
 
-    return valid_moves
+        # if start from valid_set must end in valid_set
+        elif start_move in valid_set and end_move not in valid_set:
+            moves_to_remove.append(valid_move)
+            print("--- Removed move(2):", valid_move)
+
+    new_valid_moves = [i for i in valid_moves + moves_to_remove if i not in valid_moves or i not in moves_to_remove]
+
+    return new_valid_moves
 
 
 def check_moves(board, color_board, start, depth, origin, v_moves):

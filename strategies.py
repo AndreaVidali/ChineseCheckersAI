@@ -1,41 +1,4 @@
 import math
-from decimal import Decimal
-
-# def greedy(board, all_legal_moves, obj_board, set_pieces, player_turn):
-#
-#     min_distance = 100
-#     move_index = 0
-#     best_move = 0
-#
-#     # avoid calculate distance from a not-free spot
-#     for x, y in set_pieces:
-#         if [x, y] in obj_board:
-#             obj_board.remove([x, y])
-#
-#     for x, y in obj_board:
-#         if board[x][y] == player_turn:
-#             obj_board.remove([x, y])
-#
-#     for move in all_legal_moves:
-#
-#         [x, y] = move[1]
-#
-#         for obj in obj_board:
-#
-#             [x_obj, y_obj] = obj
-#
-#             x_distance = abs(x - x_obj)
-#             y_distance = abs(y - y_obj)
-#
-#             total_distance = x_distance + y_distance
-#
-#             if total_distance <= min_distance:
-#                 min_distance = total_distance
-#                 best_move = move_index
-#
-#         move_index = move_index + 1
-#
-#     return all_legal_moves[best_move]
 
 
 def greedy(board, all_legal_moves, obj_set, player_turn):
@@ -51,7 +14,7 @@ def greedy(board, all_legal_moves, obj_set, player_turn):
 
     print("--- Obj positions (avail):", obj_available)
 
-    max_distance_travel = 0
+    max_distance_metric = 0
     move_index = 0
     best_move = 0
 
@@ -96,17 +59,18 @@ def greedy(board, all_legal_moves, obj_set, player_turn):
             end_diag = math.sqrt(((obj_x - end_x) ** 2) + ((square_obj_y - square_end_y) ** 2))
 
             distance_travel = start_diag - end_diag
+            distance_metric = distance_travel + start_diag * 0.4
 
-            if distance_travel > max_distance_travel:
+            if distance_metric > max_distance_metric:
                 best_move = move_index
-                max_distance_travel = distance_travel
+                max_distance_metric = distance_metric
                 #print("---------- distance:", round(distance_travel, 2), "- start_diag", round(start_diag, 2),
                 #      ". end diag", round(end_diag, 2))
                 #print("---------- distance UPDATE: best move", all_legal_moves[best_move])
 
         move_index = move_index + 1
 
-    #print("---------- best move", all_legal_moves[best_move], "distance:", max_distance_travel)
+    #print("---------- best move", all_legal_moves[best_move], "distance:", max_distance_metric)
 
     return all_legal_moves[best_move]
 

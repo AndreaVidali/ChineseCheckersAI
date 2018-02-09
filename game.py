@@ -18,9 +18,9 @@ from gui import *
 def main():
 
     board = build_board()
-    # player1_obj, player2_obj, player3_obj, player4_obj, player5_obj, player6_obj = build_obj_boards(board)
     player1_set, player2_set, player3_set, player4_set, player5_set, player6_set = build_sets()
     player1_obj, player2_obj, player3_obj, player4_obj, player5_obj, player6_obj = build_obj_sets()
+    player1_invalid_home, player2_invalid_home, player3_invalid_home, player4_invalid_home, player5_invalid_home, player6_invalid_home = build_invalid_homes_sets(player1_set, player2_set, player3_set, player4_set, player5_set, player6_set, player1_obj, player2_obj, player3_obj, player4_obj, player5_obj, player6_obj)
     player1_i_set, player2_i_set, player3_i_set, player4_i_set, player5_i_set, player6_i_set = build_invalid_set()
 
     display_surface = init_board()
@@ -53,9 +53,10 @@ def main():
                     set_pieces = assign_set(player_turn, player1_set, player2_set, player3_set, player4_set,
                                             player5_set, player6_set)
 
+                    # identify homes of the player of this turn
+                    invalid_homes_set = assign_invalid_homes_set(player_turn, player1_invalid_home, player2_invalid_home, player3_invalid_home, player4_invalid_home, player5_invalid_home, player6_invalid_home)
+
                     # assign objective set of positions
-                    # obj_board = assign_obj_board(player_turn, player1_obj, player2_obj, player3_obj, player4_obj,
-                    #                              player5_obj, player6_obj)
                     obj_set = assign_obj_set(player_turn, player1_obj, player2_obj, player3_obj, player4_obj,
                                              player5_obj, player6_obj)
 
@@ -64,7 +65,7 @@ def main():
                                                      player4_i_set, player5_i_set, player6_i_set)
 
                     # find all legal moves given a piece set of a player
-                    all_legal_moves = find_all_legal_moves(board, set_pieces, obj_set, invalid_set)
+                    all_legal_moves = find_all_legal_moves(board, set_pieces, obj_set, invalid_set, invalid_homes_set)
 
                     # choose the best move
                     # best_move_n = random.randint(0, all_legal_moves.__len__() - 1)

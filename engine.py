@@ -276,6 +276,19 @@ def build_invalid_set():
     return player1_i_set, player2_i_set, player3_i_set, player4_i_set, player5_i_set, player6_i_set
 
 
+def build_invalid_homes_sets(player1_set, player2_set, player3_set, player4_set, player5_set, player6_set, player1_obj, player2_obj, player3_obj, player4_obj, player5_obj, player6_obj):
+
+
+    player1_invalid_house = player2_set + player2_obj + player6_set + player6_obj
+    player2_invalid_house = player1_set + player1_obj + player6_set + player6_obj
+    player3_invalid_house = player2_set + player2_obj + player4_set + player4_obj
+    player4_invalid_house = player5_set + player5_obj + player6_set + player6_obj
+    player5_invalid_house = player4_set + player4_obj + player3_set + player3_obj
+    player6_invalid_house = player4_set + player4_obj + player5_set + player5_obj
+
+    return player1_invalid_house, player2_invalid_house, player3_invalid_house, player4_invalid_house, player5_invalid_house, player6_invalid_house
+
+
 def assign_set(player_turn, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set):
 
     set_player = player1_set
@@ -357,7 +370,27 @@ def assign_invalid_set(player_turn, player1_i_set, player2_i_set, player3_i_set,
     return invalid_set
 
 
-def find_all_legal_moves(board, set_pieces, obj_set, invalid_set):
+def assign_invalid_homes_set(player_turn, player1_invalid_home, player2_invalid_home, player3_invalid_home, player4_invalid_home, player5_invalid_home, player6_invalid_home):
+
+    invalid_homes_set = player1_invalid_home
+
+    if player_turn == 1:
+        invalid_homes_set = player1_invalid_home
+    if player_turn == 2:
+        invalid_homes_set = player2_invalid_home
+    if player_turn == 3:
+        invalid_homes_set = player3_invalid_home
+    if player_turn == 4:
+        invalid_homes_set = player4_invalid_home
+    if player_turn == 5:
+        invalid_homes_set = player5_invalid_home
+    if player_turn == 6:
+        invalid_homes_set = player6_invalid_home
+
+    return invalid_homes_set
+
+
+def find_all_legal_moves(board, set_pieces, obj_set, invalid_set, invalid_homes_set):
 
     valid_moves = []
 
@@ -378,6 +411,8 @@ def find_all_legal_moves(board, set_pieces, obj_set, invalid_set):
     print("--- Legal moves after IS: ", valid_moves)
     print("----- len", len(valid_moves))
 
+    valid_moves = dont_stop_in_house(valid_moves, invalid_homes_set)
+
     return valid_moves
 
 
@@ -392,15 +427,39 @@ def valid_move_in_house(valid_moves, invalid_set, obj_set):
         start_move = valid_move[0]
         end_move = valid_move[1]
 
-        # if start from invalid set must end in valid set
-        if start_move in invalid_set and end_move not in valid_set:
-            moves_to_remove.append(valid_move)
-            print("--- Removed move(1):", valid_move)
+        # # if start from invalid set must end in valid set
+        # if start_move in invalid_set and end_move not in valid_set:
+        #     moves_to_remove.append(valid_move)
+        #     print("--- Removed move(1):", valid_move)
+        #
+        # # if start from valid_set must end only in valid_set
+        # elif start_move in valid_set and end_move not in valid_set:
+        #     moves_to_remove.append(valid_move)
+        #     print("--- Removed move(2):", valid_move)
 
-        # if start from valid_set must end in valid_set
-        elif start_move in valid_set and end_move not in valid_set:
+        if start_move in obj_set:
+
+            start_diag = math.sqrt(((8 - start_move[0]) ** 2) + ((12 - start_move[1]) ** 2))
+            end_diag = math.sqrt(((8 - end_move[0]) ** 2) + ((12 - end_move[1]) ** 2))
+
+            if start_diag > end_diag:
+                moves_to_remove.append(valid_move)
+
+    new_valid_moves = [i for i in valid_moves + moves_to_remove if i not in valid_moves or i not in moves_to_remove]
+
+    return new_valid_moves
+
+
+def dont_stop_in_house(valid_moves, invalid_homes_set):
+
+    moves_to_remove = []
+
+    for valid_move in valid_moves:
+
+        end_move = valid_move[1]
+
+        if end_move in invalid_homes_set:
             moves_to_remove.append(valid_move)
-            print("--- Removed move(2):", valid_move)
 
     new_valid_moves = [i for i in valid_moves + moves_to_remove if i not in valid_moves or i not in moves_to_remove]
 

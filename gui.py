@@ -90,6 +90,7 @@ def color_circle(board_value, display_surface, x_coord, y_coord):
     if board_value == 6:
         pg.draw.circle(display_surface, PLAYER6_YELLOW, (x_coord, y_coord), CIRCLE_RADIUS, 0)
 
+
 def color_destination(display_surface, x_coord_long, y_coord, row, circle_in_a_row, destinations):
 
     if [row, circle_in_a_row * 2] == destinations[0]:

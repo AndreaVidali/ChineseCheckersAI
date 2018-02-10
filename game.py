@@ -5,6 +5,7 @@
 # TODO interface not responding if i dont move cursor on it -> maybe insert FPS?
 # TODO random first move?
 # TODO detect stuck -> add rule that is not allowed to rest in an opponent triangle
+# TODO reorder functions files
 
 import pygame as pg
 # import numpy as np
@@ -12,6 +13,7 @@ import sys
 from pygame.locals import *
 import random
 from engine import *
+from engine_2 import *
 from gui import *
 
 
@@ -65,12 +67,14 @@ def main():
                                                      player4_i_set, player5_i_set, player6_i_set)
 
                     # find all legal moves given a piece set of a player
-                    all_legal_moves = find_all_legal_moves(board, set_pieces, obj_set, invalid_set, invalid_homes_set)
+                    #all_legal_moves = find_all_legal_moves(board, set_pieces, obj_set, invalid_set, invalid_homes_set)
+                    all_legal_moves = find_all_legal_moves(board, set_pieces, obj_set, invalid_homes_set)
+
 
                     # choose the best move
                     # best_move_n = random.randint(0, all_legal_moves.__len__() - 1)
                     # best_move = all_legal_moves[best_move_n]
-                    best_move = find_best_move(board, all_legal_moves, obj_set, player_turn)
+                    best_move = find_best_move(board, all_legal_moves, obj_set, player_turn, set_pieces)
                     print("player:", player_turn, "best move:", best_move)
 
                     # highlight the move chosen

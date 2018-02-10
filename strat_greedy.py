@@ -1,6 +1,5 @@
 import math
 
-
 def greedy(board, all_legal_moves, obj_set, player_turn):
 
     print("--- Obj positions:        ", obj_set)
@@ -73,9 +72,6 @@ def greedy(board, all_legal_moves, obj_set, player_turn):
     #print("---------- best move", all_legal_moves[best_move], "distance:", max_distance_metric)
 
     return all_legal_moves[best_move]
-
-
-
 
 
 

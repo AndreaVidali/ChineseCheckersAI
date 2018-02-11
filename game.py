@@ -70,11 +70,14 @@ def main():
                     #all_legal_moves = find_all_legal_moves(board, set_pieces, obj_set, invalid_set, invalid_homes_set)
                     all_legal_moves = find_all_legal_moves(board, set_pieces, obj_set, invalid_homes_set)
 
+                    move = all_legal_moves[0]
+                    [x, y] = move[0]
+                    print('Tesssssssst:', board[x][y])
 
                     # choose the best move
                     # best_move_n = random.randint(0, all_legal_moves.__len__() - 1)
                     # best_move = all_legal_moves[best_move_n]
-                    best_move = find_best_move(board, all_legal_moves, obj_set, player_turn, set_pieces)
+                    best_move = find_best_move(board, all_legal_moves, obj_set, player_turn, set_pieces, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set)
                     print("player:", player_turn, "best move:", best_move)
 
                     # highlight the move chosen

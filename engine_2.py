@@ -102,6 +102,24 @@ def assign_invalid_homes_set(player_turn, player1_invalid_home, player2_invalid_
     return invalid_homes_set
 
 
+def update_player_set(set_pieces, player_turn, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set):
+
+    if player_turn == 1:
+        player1_set = set_pieces
+    if player_turn == 2:
+        player2_set = set_pieces
+    if player_turn == 3:
+        player3_set = set_pieces
+    if player_turn == 4:
+        player4_set = set_pieces
+    if player_turn == 5:
+        player5_set = set_pieces
+    if player_turn == 6:
+        player6_set = set_pieces
+
+    return player1_set, player2_set, player3_set, player4_set, player5_set, player6_set
+
+
 def find_all_legal_moves(board, set_pieces, obj_set, invalid_homes_set):
 #def find_all_legal_moves(board, set_pieces, obj_set, invalid_set, invalid_homes_set):
 

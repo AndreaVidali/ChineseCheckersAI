@@ -1,4 +1,5 @@
 from engine_2 import *
+import copy
 
 
 player1_set, player2_set, player3_set, player4_set, player5_set, player6_set = build_sets()
@@ -8,34 +9,67 @@ player1_inv_homes, player2_inv_homes, player3_inv_homes, player4_inv_homes, play
                              player2_obj, player3_obj, player4_obj, player5_obj, player6_obj)
 
 
-def minimax(board, depth, player, first_player):
+def minimax(board, depth, player, first_player, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set):
+
+    board_copy = board[:][:]
 
     print('MINIMAX - depth:', depth, '. player', player, '. first player', first_player)
 
     if depth == 0:
-        board_score = calculate_board_score(board, player)
+        board_score = calculate_board_score(board_copy, player, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set)
         print('score:', board_score, 'for player', player, 'at depth', depth)
         return board_score, None
     
     set_pieces = assign_set(player, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set)
+    # set_pieces = find_player_pieces(board, player)
+
     obj_set = assign_obj_set(player, player1_obj, player2_obj, player3_obj, player4_obj,
                              player5_obj, player6_obj)
+
     inv_homes_set = assign_invalid_homes_set(player, player1_inv_homes, player2_inv_homes, player3_inv_homes,
                                              player4_inv_homes, player5_inv_homes, player6_inv_homes)
 
-    valid_moves = find_all_legal_moves(board, set_pieces, obj_set, inv_homes_set)
+    valid_moves = find_all_legal_moves(board_copy, set_pieces, obj_set, inv_homes_set)
 
     scores = []
     moves = []
 
     for move in valid_moves:
-        new_board, new_set_pieces = do_move(board, move, set_pieces)
+
+        # board_copy = board_copy[:][:]
+        print('--- player', player, "set:", set_pieces)
+        print('- player', player, "- move:", move)
+
+        [start_x, start_y] = move[0]
+        [end_x, end_y] = move[1]
+        if board_copy[start_x][start_y] != player:
+            print("---------------------- board start non ce il player -prima ---", move[0], board_copy[start_x][start_y])
+        if board_copy[end_x][end_y] != 0:
+            print("---------------------- board end non e vuota -prima ---", move[1], board_copy[end_x][end_y])
+
+        board_copy_again = copy.copy(board_copy)
+        new_board, new_set_pieces = do_move(board_copy_again, move, set_pieces)
+
+        [start_x, start_y] = move[0]
+        [end_x, end_y] = move[1]
+        if board_copy[start_x][start_y] != player:
+            print("---------------------- board start non ce il player -dopo ---", move[0], board_copy[start_x][start_y])
+        if board_copy[end_x][end_y] != 0:
+            print("---------------------- board end non e vuota -dopo ---", move[1], board_copy[end_x][end_y])
+        if new_board[start_x][start_y] != 0:
+            print("---------------------- nuova board start non vuoto ---", move[0], new_board[start_x][start_y])
+        if new_board[end_x][end_y] != player:
+            print("---------------------- nuova board end non ce il player ---", move[1], new_board[end_x][end_y])
+
+        player1_set, player2_set, player3_set, player4_set, player5_set, player6_set = \
+            update_player_set(new_set_pieces, player, player1_set, player2_set, player3_set, player4_set,
+                              player5_set, player6_set)
 
         next_player = player + 1
         if next_player == 7:
             next_player = 1
 
-        score, something = minimax(new_board, depth - 1, next_player, first_player)
+        score, something = minimax(new_board, depth - 1, next_player, first_player, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set)
         scores.append(score)
         moves.append(move)
 
@@ -49,14 +83,21 @@ def minimax(board, depth, player, first_player):
         return scores[min_score_index], worst_opponent_move
 
 
-def calculate_board_score(board, player_turn):
+def calculate_board_score(board, player_turn, p1_pieces, p2_pieces, p3_pieces, p4_pieces, p5_pieces, p6_pieces):
 
-    p1_pieces = find_player_pieces(board, 1)
-    p2_pieces = find_player_pieces(board, 2)
-    p3_pieces = find_player_pieces(board, 3)
-    p4_pieces = find_player_pieces(board, 4)
-    p5_pieces = find_player_pieces(board, 5)
-    p6_pieces = find_player_pieces(board, 6)
+    # p1_pieces = find_player_pieces(board, 1)
+    # p2_pieces = find_player_pieces(board, 2)
+    # p3_pieces = find_player_pieces(board, 3)
+    # p4_pieces = find_player_pieces(board, 4)
+    # p5_pieces = find_player_pieces(board, 5)
+    # p6_pieces = find_player_pieces(board, 6)
+
+    print("--- player:", 1, "set:", p1_pieces)
+    print("--- player:", 2, "set:", p2_pieces)
+    print("--- player:", 3, "set:", p3_pieces)
+    print("--- player:", 4, "set:", p4_pieces)
+    print("--- player:", 5, "set:", p5_pieces)
+    print("--- player:", 6, "set:", p6_pieces)
 
     p1_avg_distance = find_avg_distance(p1_pieces, [16, 12])
     p2_avg_distance = find_avg_distance(p2_pieces, [12, 0])
@@ -75,7 +116,7 @@ def find_player_pieces(board, player):
 
     p_pieces = []
     p_coords = np.where(board == player)
-    print(player, p_coords[0], p_coords[1])
+    print("--- player:", player, "set vago:", p_coords[0], p_coords[1])
     for i in range(0, 10):
         x = p_coords[0][i]
         y = p_coords[1][i]

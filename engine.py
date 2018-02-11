@@ -190,30 +190,13 @@ def assign_invalid_set(player_turn, player1_i_set, player2_i_set, player3_i_set,
     return invalid_set
 
 
-def update_player_set(set_pieces, player_turn, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set):
-
-    if player_turn == 1:
-        player1_set = set_pieces
-    if player_turn == 2:
-        player2_set = set_pieces
-    if player_turn == 3:
-        player3_set = set_pieces
-    if player_turn == 4:
-        player4_set = set_pieces
-    if player_turn == 5:
-        player5_set = set_pieces
-    if player_turn == 6:
-        player6_set = set_pieces
-
-    return player1_set, player2_set, player3_set, player4_set, player5_set, player6_set
-
-
-def find_best_move(board, all_legal_moves, obj_set, player_turn, set_pieces):
-
-    #best_move = greedy(board, all_legal_moves, obj_set, player_turn)
-
-    depth = 2
-    best_move = minimax(board, depth, player_turn, player_turn)
+def find_best_move(board, all_legal_moves, obj_set, player_turn, set_pieces, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set):
+    mode = 1
+    if mode == 0:
+        best_move = greedy(board, all_legal_moves, obj_set, player_turn)
+    else:
+        depth = 1
+        score, best_move = minimax(board, depth, player_turn, player_turn, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set)
 
     return best_move
 

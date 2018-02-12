@@ -50,9 +50,9 @@ def greedy(board, all_legal_moves, obj_set, player_turn):
             [obj_x, obj_y] = obj
 
             # trasform y coord imaging the board as a square, which it should be
-            square_start_y = (start_y * 17) / 25
-            square_end_y = (end_y * 17) / 25
-            square_obj_y = (obj_y * 17) / 25
+            square_start_y = (start_y * 14.43) / 25
+            square_end_y = (end_y * 14.43) / 25
+            square_obj_y = (obj_y * 14.43) / 25
 
             start_diag = math.sqrt(((obj_x - start_x) ** 2) + ((square_obj_y - square_start_y) ** 2))
             end_diag = math.sqrt(((obj_x - end_x) ** 2) + ((square_obj_y - square_end_y) ** 2))

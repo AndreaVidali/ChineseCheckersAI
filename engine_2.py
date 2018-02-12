@@ -19,12 +19,12 @@ def build_sets():
 
 def build_obj_sets():
 
-    player4_obj = [[0, 12], [1, 11], [1, 13], [2, 10], [2, 12], [2, 14], [3, 9], [3, 11], [3, 13], [3, 15]]
-    player5_obj = [[4, 18], [4, 20], [4, 22], [4, 24], [5, 19], [5, 21], [5, 23], [6, 20], [6, 22], [7, 21]]
-    player6_obj = [[9, 21], [10, 20], [10, 22], [11, 19], [11, 21], [11, 23], [12, 18], [12, 20], [12, 22], [12, 24]]
-    player1_obj = [[13, 9], [13, 11], [13, 13], [13, 15], [14, 10], [14, 12], [14, 14], [15, 11], [15, 13], [16, 12]]
-    player2_obj = [[9, 3], [10, 2], [10, 4], [11, 1], [11, 3], [11, 5], [12, 0], [12, 2], [12, 4], [12, 6]]
-    player3_obj = [[4, 0], [4, 2], [4, 4], [4, 6], [5, 1], [5, 3], [5, 5], [6, 2], [6, 4], [7, 3]]
+    player1_obj = [[16, 12], [15, 11], [15, 13], [14, 10], [14, 14], [14, 12], [13, 9], [13, 15], [13, 13], [13, 11]]
+    player2_obj = [[12, 0], [11, 1], [12, 2], [10, 2], [12, 4], [11, 3], [9, 3], [12, 6], [11, 5], [10, 4]]
+    player3_obj = [[4, 0], [5, 1], [4, 2], [5, 3], [6, 2], [4, 4], [6, 4], [5, 5], [7, 3], [4, 6]]
+    player4_obj = [[0, 12], [1, 11], [1, 13], [2, 12], [2, 10], [2, 14], [3, 11], [3, 13], [3, 9], [3, 15]]
+    player5_obj = [[4, 24], [5, 23], [4, 22], [5, 21], [4, 20],  [6, 22], [5, 19], [6, 20], [4, 18], [7, 21]]
+    player6_obj = [[12, 24], [11, 23], [12, 22], [11, 21], [12, 20], [10, 22], [10, 20], [11, 19], [9, 21], [12, 18]]
 
     return player1_obj, player2_obj, player3_obj, player4_obj, player5_obj, player6_obj
 
@@ -226,10 +226,7 @@ def find_jump_between(start, x_v1, y_v1):
         return 0, 0
 
 
-# def valid_move_in_house(valid_moves, invalid_set, obj_set):
 def valid_move_in_house(valid_moves, obj_set):
-
-    #valid_set = [i for i in obj_set + invalid_set if i not in obj_set or i not in invalid_set]
 
     moves_to_remove = []
 
@@ -250,9 +247,9 @@ def valid_move_in_house(valid_moves, obj_set):
 
         if start_move in obj_set:
 
-            square_start_y = (start_move[1] * 17) / 25
-            square_end_y = (end_move[1] * 17) / 25
-            central_pos = (12 * 17) / 25
+            square_start_y = (start_move[1] * 14.43) / 25
+            square_end_y = (end_move[1] * 14.43) / 25
+            central_pos = (12 * 14.43) / 25
 
             start_diag = math.sqrt(((8 - start_move[0]) ** 2) + ((central_pos - square_start_y) ** 2))
             end_diag = math.sqrt(((8 - end_move[0]) ** 2) + ((central_pos - square_end_y) ** 2))

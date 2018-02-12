@@ -6,6 +6,7 @@
 # TODO random first move?
 # TODO detect stuck -> add rule that is not allowed to rest in an opponent triangle
 # TODO reorder functions files
+# TODO minimax score function to pint on the latest empty spots
 
 import pygame as pg
 # import numpy as np

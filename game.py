@@ -50,7 +50,7 @@ def main():
                     if player_turn == 7:
                         player_turn = 1
 
-                    print("Player", player_turn)
+                    #print("Player", player_turn)
 
                     # consider the pieces of the player of this turn
                     set_pieces = assign_set(player_turn, player1_set, player2_set, player3_set, player4_set,
@@ -76,6 +76,25 @@ def main():
                     # best_move = all_legal_moves[best_move_n]
                     best_move = find_best_move(board, all_legal_moves, obj_set, player_turn, set_pieces, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set)
                     # print("player:", player_turn, "best move:", best_move)
+
+                    if best_move == None:
+                        pg.time.wait(10000)
+                        board = build_board()
+                        player1_set, player2_set, player3_set, player4_set, player5_set, player6_set = build_sets()
+                        player1_obj, player2_obj, player3_obj, player4_obj, player5_obj, player6_obj = build_obj_sets()
+                        player1_invalid_home, player2_invalid_home, player3_invalid_home, player4_invalid_home, player5_invalid_home, player6_invalid_home = build_invalid_homes_sets(
+                            player1_set, player2_set, player3_set, player4_set, player5_set, player6_set, player1_obj,
+                            player2_obj, player3_obj, player4_obj, player5_obj, player6_obj)
+                        player1_i_set, player2_i_set, player3_i_set, player4_i_set, player5_i_set, player6_i_set = build_invalid_set()
+                        display_surface = init_board()
+
+                        # player decision
+                        player_turn = random.randint(1, 6)
+
+                        # game start
+                        game_over = False
+                        break
+
 
                     # highlight the move chosen
                     highlight_best_move(best_move, display_surface)

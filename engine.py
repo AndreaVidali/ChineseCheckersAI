@@ -1,6 +1,7 @@
 import numpy as np
 from strat_greedy import greedy
 from strat_minimax import minimax
+from strat_alfabeta import alphabeta
 
 
 def build_board():
@@ -195,8 +196,15 @@ def find_best_move(board, all_legal_moves, obj_set, player_turn, set_pieces, pla
     if mode == 0:
         best_move = greedy(board, all_legal_moves, obj_set, player_turn)
     else:
-        depth = 1
-        score, best_move = minimax(board, depth, player_turn, player_turn, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set)
+        if player_turn == 3:
+            depth = 4
+            print('MINIMAX - depth:', depth, '. player', player_turn)
+            score, best_move = alphabeta(board, depth, player_turn, player_turn, player1_set, player2_set, player3_set,
+                                         player4_set, player5_set, player6_set, -1000, 1000)
+        else:
+            depth = 1
+            print('MINIMAX - depth:', depth, '. player', player_turn)
+            score, best_move = alphabeta(board, depth, player_turn, player_turn, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set, -1000, 1000)
 
     return best_move
 

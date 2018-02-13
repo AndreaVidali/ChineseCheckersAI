@@ -14,7 +14,7 @@ def minimax(board, depth, player, first_player, player1_set, player2_set, player
     board_copy = board[:][:]
 
     if depth == 0:
-        board_score = calculate_board_score(board_copy, first_player, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set)
+        board_score = calculate_board_score(first_player, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set)
         return board_score, None
     
     set_pieces = assign_set(player, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set)
@@ -32,9 +32,6 @@ def minimax(board, depth, player, first_player, player1_set, player2_set, player
 
     for move in valid_moves:
 
-        # print('--- player', player, "set:", set_pieces)
-        # print('- player', player, "- move:", move)
-
         board_copy_again = copy.copy(board_copy)
         new_board, new_set_pieces = do_move(board_copy_again, move, set_pieces)
 
@@ -49,9 +46,6 @@ def minimax(board, depth, player, first_player, player1_set, player2_set, player
         score, something = minimax(new_board, depth - 1, next_player, first_player, player1_set, player2_set, player3_set, player4_set, player5_set, player6_set)
         scores.append(score)
         moves.append(move)
-        #print('- player', player, 'depth', depth, '- move', move, 'score', score)
-        #print('---- scores:', scores)
-        #print('---- moves:', moves)
 
     if len(scores) == 0:
         return
@@ -59,17 +53,15 @@ def minimax(board, depth, player, first_player, player1_set, player2_set, player
     if player == first_player:
         max_score_index = scores.index(max(scores))
         best_move = moves[max_score_index]
-        #print('- player', player, '- best move', best_move, '. score', max(scores), '. at index', max_score_index)
         return scores[max_score_index], best_move
 
     else:
         min_score_index = scores.index(min(scores))
         worst_opponent_move = moves[min_score_index]
-        #print('- player', player, '- worst opponent move', worst_opponent_move, '. score', min(scores), '. at index', min_score_index)
         return scores[min_score_index], worst_opponent_move
 
 
-def calculate_board_score(board, player_turn, p1_pieces, p2_pieces, p3_pieces, p4_pieces, p5_pieces, p6_pieces):
+def calculate_board_score(player_turn, p1_pieces, p2_pieces, p3_pieces, p4_pieces, p5_pieces, p6_pieces):
 
     p1_avg_distance = find_avg_distance(p1_pieces, player1_obj, 16, 12)
     #print("-- avg distance p1", p1_avg_distance)
@@ -92,9 +84,6 @@ def calculate_board_score(board, player_turn, p1_pieces, p2_pieces, p3_pieces, p
 
 def find_avg_distance(p_pieces, p_obj, p_default_x, p_default_y):
 
-    # print("--- set:", p_pieces)
-    # print("--- obj:", p_obj)
-
     total_distance = 0
     obj_x = p_default_x
     obj_y = p_default_y
@@ -102,7 +91,6 @@ def find_avg_distance(p_pieces, p_obj, p_default_x, p_default_y):
         if obj_piece not in p_pieces:
             [obj_x, obj_y] = obj_piece
             break
-    # print("--- obj position:", obj_x, obj_y, "for player:")
 
     for piece in p_pieces:
 
@@ -118,12 +106,10 @@ def find_avg_distance(p_pieces, p_obj, p_default_x, p_default_y):
     avg_distance = total_distance / 10
 
     return avg_distance
-    #return total_distance
 
 
 def calculate_score(player_turn, p1_avg_distance, p2_avg_distance, p3_avg_distance, p4_avg_distance, p5_avg_distance,
                     p6_avg_distance):
-
     score = 0
 
     if player_turn == 1:

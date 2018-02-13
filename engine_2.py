@@ -235,16 +235,6 @@ def valid_move_in_house(valid_moves, obj_set):
         start_move = valid_move[0]
         end_move = valid_move[1]
 
-        # # if start from invalid set must end in valid set
-        # if start_move in invalid_set and end_move not in valid_set:
-        #     moves_to_remove.append(valid_move)
-        #     print("--- Removed move(1):", valid_move)
-        #
-        # # if start from valid_set must end only in valid_set
-        # elif start_move in valid_set and end_move not in valid_set:
-        #     moves_to_remove.append(valid_move)
-        #     print("--- Removed move(2):", valid_move)
-
         if start_move in obj_set:
 
             square_start_y = (start_move[1] * 14.43) / 25

@@ -207,22 +207,24 @@ def find_best_move(board, all_legal_moves, obj_set, player_turn, set_pieces, pla
             depth = 1
             score, best_move = alphabeta(board, depth, player_turn, player_turn, player1_set, player2_set,
                                          player3_set, player4_set, player5_set, player6_set, -1000, 1000)
-        elif player_turn == 2:
+        elif player_turn == 3:
             depth = 2
             score, best_move = alphabeta(board, depth, player_turn, player_turn, player1_set, player2_set,
                                          player3_set, player4_set, player5_set, player6_set, -1000, 1000)
-        elif player_turn == 3:
+        elif player_turn == 5:
             depth = 3
             score, best_move = alphabeta(board, depth, player_turn, player_turn, player1_set, player2_set,
                                          player3_set, player4_set, player5_set, player6_set, -1000, 1000)
+        elif player_turn == 2:
+            # depth = 1
+            # score, best_move = minimax(board, depth, player_turn, player_turn, player1_set, player2_set,
+            #                            player3_set, player4_set, player5_set, player6_set)
+            best_move = greedy(board, all_legal_moves, obj_set, player_turn)
         elif player_turn == 4:
-            depth = 1
-            score, best_move = minimax(board, depth, player_turn, player_turn, player1_set, player2_set,
-                                       player3_set, player4_set, player5_set, player6_set)
-        elif player_turn == 5:
-            depth = 2
-            score, best_move = minimax(board, depth, player_turn, player_turn, player1_set, player2_set,
-                                       player3_set, player4_set, player5_set, player6_set)
+            # depth = 2
+            # score, best_move = minimax(board, depth, player_turn, player_turn, player1_set, player2_set,
+            #                            player3_set, player4_set, player5_set, player6_set)
+            best_move = greedy(board, all_legal_moves, obj_set, player_turn)
         elif player_turn == 6:
             best_move = greedy(board, all_legal_moves, obj_set, player_turn)
 

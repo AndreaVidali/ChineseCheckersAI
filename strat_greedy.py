@@ -16,25 +16,6 @@ def greedy(board, all_legal_moves, obj_set, player_turn):
 
     for move in all_legal_moves:
 
-        if player_turn == 1:
-            obj_x = 16
-            obj_y = 12
-        if player_turn == 2:
-            obj_x = 12
-            obj_y = 0
-        if player_turn == 3:
-            obj_x = 4
-            obj_y = 0
-        if player_turn == 4:
-            obj_x = 0
-            obj_y = 12
-        if player_turn == 5:
-            obj_x = 4
-            obj_y = 24
-        if player_turn == 6:
-            obj_x = 12
-            obj_y = 24
-
         [start_x, start_y] = move[0]
         [end_x, end_y] = move[1]
 
